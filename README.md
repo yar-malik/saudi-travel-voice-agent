@@ -100,24 +100,31 @@ In travel and hospitality, that usually means:
 These are integration points you wire up yourself. Nothing here is a certified
 connector, and no affiliation with any of these platforms is claimed.
 
-## What speaks, and what listens
+## Two ways to run this
 
-Voho is a speech **synthesis** API — it speaks, it does not transcribe. So the
-listening half is yours to choose, and the seam is left in the open in
-[`stt.py`](stt.py): your telephony provider's own transcription, a hosted
-recogniser, or a self-hosted model for audio that is not allowed to leave the
-building.
+**Let Voho be the whole agent.** A Voho voice agent answers the line, hears the
+caller in Saudi Arabic, works out what they actually want, takes the action in
+your systems, stops talking the moment it is interrupted, hands over to a
+person when it should, and leaves a bilingual transcript and summary behind.
+Hearing, deciding and speaking are all Voho's — you configure the agent and its
+actions rather than writing any of this. It is the fastest route to a live
+line.
 
-| Part | What does it | Where |
+**Or assemble it yourself, the way this repository does.** Here the
+conversation lives in code you can read line by line, the tools are yours, and
+Voho's Speech API provides the voice. Worth it when the script has to be
+reviewed before it goes anywhere near a caller, or when every part has to sit
+inside your own network.
+
+| Part | In this repository | With a Voho agent |
 | --- | --- | --- |
-| Speaking | **Voho** — Najdi voices, 8 kHz mulaw straight onto the phone line | [`voho.py`](voho.py) |
-| Listening | Whichever recogniser you point it at | [`stt.py`](stt.py) |
-| The conversation | Scripted beats, so compliance can read what will be said | [`agent.py`](agent.py) |
-| Your systems | One decorator per tool | [`tools.py`](tools.py) |
+| Hearing the caller | whichever recogniser you point [`stt.py`](stt.py) at | Voho |
+| Deciding what to do | scripted beats in [`agent.py`](agent.py) | Voho |
+| Acting in your systems | your code in [`tools.py`](tools.py) | Voho actions, calling your API |
+| Speaking | Voho, via [`voho.py`](voho.py) | Voho |
+| Transcript and summary | yours to keep | Voho, in Arabic and English |
 
-Scripted rather than generative, deliberately. In a regulated sector the first
-version has to say exactly what was signed off. The seam for a model is
-`Call.match()` — swap it for an intent classifier and everything else stands.
+Both end in the same place. Start with whichever suits the team you have.
 
 ## On a real phone number
 
