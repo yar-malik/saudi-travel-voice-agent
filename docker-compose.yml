@@ -1,0 +1,25 @@
+# Run the agent on your own infrastructure.
+#
+#   docker compose up --build
+#
+# Nothing here phones home. The only outbound call is speech synthesis, and
+# pointing VOHO_BASE_URL at a Voho deployment inside your own network removes
+# even that — at which point the container can run with no internet at all.
+
+services:
+  agent:
+    build: .
+    ports:
+      - "${PORT:-5000}:5000"
+    env_file:
+      - .env
+    environment:
+      - PORT=5000
+    restart: unless-stopped
+    # Everything it needs is baked into the image; nothing is written to disk
+    # at runtime, so the filesystem can stay read-only.
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true

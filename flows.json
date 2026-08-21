@@ -1,0 +1,293 @@
+{
+  "industry": "travel and hospitality",
+  "slug": "travel-hospitality",
+  "greeting": {
+    "ar": "أهلاً وسهلاً، معك ليلى من قسم الحجوزات. كيف أقدر أساعدك؟",
+    "en": "Hello, this is Layla in reservations. How can I help?"
+  },
+  "flows": [
+    {
+      "id": "booking",
+      "name": "Booking and upsell",
+      "promise": "Bookings taken in Saudi Arabic, with the better room offered naturally.",
+      "kind": "call",
+      "beats": [
+        {
+          "at": 0.2,
+          "kind": "msg",
+          "who": "CALLER",
+          "ar": "أبغى غرفة ليلتين من الخميس.",
+          "en": "I want a room for two nights from Thursday."
+        },
+        {
+          "at": 2.4,
+          "kind": "tool",
+          "name": "check_availability",
+          "args": "{ \"nights\": 2, \"from\": \"Thu\" }",
+          "result": "{ \"standard\": 640, \"suite\": 890, \"occupancy\": 0.62 }"
+        },
+        {
+          "at": 4.6,
+          "kind": "msg",
+          "who": "AGENT",
+          "ar": "العادية بستمية وأربعين، والجناح بثمنمية وتسعين. تبغى الجناح؟",
+          "en": "Standard is 640, the suite 890. Would you like the suite?"
+        },
+        {
+          "at": 8,
+          "kind": "tool",
+          "name": "create_booking",
+          "args": "{ \"room\": \"suite\", \"nights\": 2 }",
+          "result": "{ \"booking\": \"BK-5510\", \"upsell_sar\": 500 }"
+        }
+      ],
+      "outcome": [
+        [
+          "Booking",
+          "BK-5510"
+        ],
+        [
+          "Upsell",
+          "SAR 500"
+        ],
+        [
+          "Language",
+          "Najdi Arabic"
+        ]
+      ]
+    },
+    {
+      "id": "change",
+      "name": "Change and cancellation",
+      "promise": "Flight changes handled straight away, with the fare rules applied correctly.",
+      "kind": "call",
+      "beats": [
+        {
+          "at": 0.2,
+          "kind": "msg",
+          "who": "CALLER",
+          "ar": "أبغى أأجل رحلتي من الجمعة للأحد.",
+          "en": "I want to move my flight from Friday to Sunday."
+        },
+        {
+          "at": 2.6,
+          "kind": "tool",
+          "name": "check_fare_rules",
+          "args": "{ \"pnr\": \"XR44Q\", \"change\": \"Fri->Sun\" }",
+          "result": "{ \"change_fee_sar\": 150, \"fare_difference_sar\": 90 }"
+        },
+        {
+          "at": 5,
+          "kind": "msg",
+          "who": "AGENT",
+          "ar": "التغيير بمئة وخمسين رسوم وتسعين فرق سعر. أأكد؟",
+          "en": "The change is 150 in fees plus 90 fare difference. Shall I confirm?"
+        },
+        {
+          "at": 8.2,
+          "kind": "tool",
+          "name": "rebook_flight",
+          "args": "{ \"pnr\": \"XR44Q\", \"date\": \"Sun\" }",
+          "result": "{ \"confirmed\": true, \"new_flight\": \"SV1042\" }"
+        }
+      ],
+      "outcome": [
+        [
+          "Rebooked",
+          "SV1042"
+        ],
+        [
+          "Fare rules",
+          "Applied automatically"
+        ],
+        [
+          "Wait time",
+          "None"
+        ]
+      ]
+    },
+    {
+      "id": "concierge",
+      "name": "In-stay concierge",
+      "promise": "Guest requests routed to the right team, in any language.",
+      "kind": "call",
+      "beats": [
+        {
+          "at": 0.2,
+          "kind": "msg",
+          "who": "CALLER",
+          "ar": "ممكن مناشف زيادة وحجز مطعم الساعة ٨؟",
+          "en": "Can I get extra towels and a restaurant booking at 8?"
+        },
+        {
+          "at": 2.8,
+          "kind": "tool",
+          "name": "housekeeping_request",
+          "args": "{ \"room\": 812, \"item\": \"towels\", \"qty\": 2 }",
+          "result": "{ \"ticket\": \"HK-221\", \"eta_min\": 10 }"
+        },
+        {
+          "at": 5,
+          "kind": "tool",
+          "name": "reserve_table",
+          "args": "{ \"covers\": 2, \"time\": \"20:00\" }",
+          "result": "{ \"reservation\": \"RS-88\", \"confirmed\": true }"
+        },
+        {
+          "at": 7,
+          "kind": "msg",
+          "who": "AGENT",
+          "ar": "المناشف بتوصلك خلال ١٠ دقايق، وحجزت لك طاولة ٨.",
+          "en": "Towels in ten minutes, and your table at 8 is booked."
+        }
+      ],
+      "outcome": [
+        [
+          "Requests",
+          "2 in one call"
+        ],
+        [
+          "Routed to",
+          "Housekeeping + F&B"
+        ],
+        [
+          "Times the guest had to ask",
+          "Once"
+        ]
+      ]
+    },
+    {
+      "id": "checkin-docs",
+      "kind": "document",
+      "name": "Check-in document capture",
+      "promise": "Passports and visas read at the desk in seconds, straight into your hotel system.",
+      "docName": "Passport + visa",
+      "docKind": "Desk scan",
+      "hard": "A worn machine-readable zone, a visa sticker overlapping the data page, and a name whose Arabic and Latin spellings differ.",
+      "page": {
+        "title": "Passport data page",
+        "subtitle": "Machine-readable zone · visa sticker",
+        "rows": 3,
+        "photo": true,
+        "stamp": "VISA"
+      },
+      "fields": [
+        {
+          "label": "surname",
+          "value": "AL-OTAIBI",
+          "confidence": 0.97,
+          "box": {
+            "x": 6,
+            "y": 20,
+            "w": 50,
+            "h": 8
+          }
+        },
+        {
+          "label": "given_names",
+          "value": "KHALID ABDULLAH",
+          "confidence": 0.95,
+          "box": {
+            "x": 6,
+            "y": 30,
+            "w": 60,
+            "h": 8
+          }
+        },
+        {
+          "label": "name_ar",
+          "value": "خالد عبدالله العتيبي",
+          "confidence": 0.91,
+          "note": "Transliteration differs from MRZ",
+          "box": {
+            "x": 6,
+            "y": 40,
+            "w": 60,
+            "h": 8
+          }
+        },
+        {
+          "label": "passport_no",
+          "value": "A1•••4471",
+          "confidence": 0.98,
+          "box": {
+            "x": 56,
+            "y": 20,
+            "w": 38,
+            "h": 8
+          }
+        },
+        {
+          "label": "visa_expiry",
+          "value": "2026-11-30",
+          "confidence": 0.79,
+          "note": "Sticker overlaps the data page",
+          "box": {
+            "x": 6,
+            "y": 66,
+            "w": 60,
+            "h": 10
+          }
+        }
+      ],
+      "outcome": [
+        [
+          "Check-in",
+          "Under 30s"
+        ],
+        [
+          "PMS",
+          "Populated"
+        ],
+        [
+          "Typing at the desk",
+          "None"
+        ]
+      ]
+    },
+    {
+      "id": "disruption",
+      "kind": "workflow",
+      "name": "Flight disruption",
+      "promise": "A cancelled flight rebooks the guest and holds the room, unprompted.",
+      "trigger": "An inbound guest’s flight is cancelled",
+      "reading": "SV1042 cancelled · guest arrives 9 hours late · room held to 18:00",
+      "steps": [
+        {
+          "t": "Match the flight to bookings",
+          "d": "3 arriving guests affected",
+          "system": "Airline feed"
+        },
+        {
+          "t": "Extend the room hold",
+          "d": "Hotel system · guest no longer marked as a no-show",
+          "system": "Hotel system"
+        },
+        {
+          "t": "Offer a rebooked transfer",
+          "d": "Airport pickup moved to the new arrival",
+          "system": "Transport"
+        },
+        {
+          "t": "Notify the guest",
+          "d": "WhatsApp in Arabic and English",
+          "system": "WhatsApp"
+        }
+      ],
+      "outcome": [
+        [
+          "Rooms held",
+          "3"
+        ],
+        [
+          "No-shows",
+          "Prevented"
+        ],
+        [
+          "Guest had to do",
+          "Nothing"
+        ]
+      ]
+    }
+  ]
+}
