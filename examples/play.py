@@ -55,6 +55,23 @@ def show(turns: list[agent_mod.Turn], counter: list[int]) -> None:
         print(f"        {DIM}{path} · {len(audio) // 1024} KB · voice {voho.DEFAULT_VOICE}{RESET}")
 
 
+def preflight() -> None:
+    """Ask for a key before playing, rather than after every silent line.
+
+    The recorded results mean a scenario runs with no key at all, which is
+    useful and was also misleading: you could read the whole conversation and
+    never learn that the voice is the part on offer.
+    """
+    if SILENT or voho.has_key():
+        return
+    print(
+        f"\n  {YELLOW}No Voho key yet.{RESET} The voice is the point of this —"
+        f"\n  {DIM}run{RESET} python setup.py {DIM}to get one (a minute, at app.voho.ai),{RESET}"
+        f"\n  {DIM}or pass{RESET} --silent {DIM}to read the conversation without audio.{RESET}\n"
+    )
+    raise SystemExit(1)
+
+
 def main() -> None:
     data = agent_mod.load_flows()
     convo = agent_mod.Agent(data)
@@ -71,6 +88,8 @@ def main() -> None:
             print(f"\n  {DIM}Tools still replaying recorded results: {', '.join(missing)}{RESET}")
         print(f"\n  Play one:  python examples/play.py {data['flows'][0]['id']}\n")
         return
+
+    preflight()
 
     counter = [0]
     turns = convo.start(wanted)

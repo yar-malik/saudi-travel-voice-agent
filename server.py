@@ -27,6 +27,11 @@ import voho  # noqa: E402
 app = Flask(__name__)
 FLOWS = agent_mod.load_flows()
 
+if not voho.has_key():
+    # Fail at boot, not on the first caller. A line that answers and then
+    # cannot speak is worse than one that never came up.
+    raise SystemExit(f"\n{voho.MISSING_KEY}\n")
+
 _calls: Dict[str, agent_mod.Agent] = {}
 _clips: Dict[str, Tuple[bytes, str]] = {}
 _lock = threading.Lock()
