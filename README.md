@@ -16,6 +16,25 @@ running inside your network.
   <b><a href="https://voho.ai/demos/travel-hospitality">▶ Play the live demo</a></b> — runs in your browser, no sign-up.
 </p>
 
+<!-- voho:try -->
+## Try it in your browser first
+
+You do not have to clone anything to see whether this works for you. The same
+engine this repository calls is running at **[app.voho.ai/agents](https://app.voho.ai/agents)** —
+Build an agent and talk to it out loud, in the browser, in about a minute.
+
+New accounts start with **$25 of credit**, and one balance and one API key
+cover every Voho product: AI Call Center, and the five beside it.
+
+- **[Build an agent and talk to it out loud →](https://app.voho.ai/agents)**
+- [Get an API key](https://app.voho.ai/tokens) — the key this repository needs
+- [Read the API docs](https://docs.voho.ai)
+
+Running it inside your own estate, against your own systems, is what we do
+with you: [talk to us](https://voho.ai/book-demo).
+
+---
+
 ---
 
 ## The problem
