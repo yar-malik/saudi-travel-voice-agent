@@ -1,0 +1,12 @@
+{
+  "name": "saudi-travel-voice-agent",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Free, self-hosted Arabic voice agent for Saudi hotels and travel operators — bookings, changes and guest requests in Najdi Arabic. Docker, MIT.",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "start": "node examples/node/index.mjs"
+  },
+  "license": "MIT"
+}
