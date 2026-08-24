@@ -77,32 +77,53 @@ replacing one stub at a time.
 
 These are not conversations, so the engine does not play them — they are the recorded shape of the document, the archive answer or the workflow, kept here because they are the same job in the same sector.
 
-## Run it on your own infrastructure
+## Quick start
+
+One key, one command, about a minute. Get a key at
+[app.voho.ai/tokens](https://app.voho.ai/tokens) — new accounts start with
+**$25 of credit**, which is enough to run this many times over.
 
 ```bash
 git clone https://github.com/yar-malik/saudi-travel-voice-agent.git
 cd saudi-travel-voice-agent
-pip install -r requirements.txt
-
-python setup.py          # asks for your Voho key and verifies it
-docker compose up --build
+export VOHO_API_KEY=voho_sk_live_...
 ```
 
-`setup.py` walks you through creating a token at
-[app.voho.ai](https://app.voho.ai) under **API Tokens**, checks it against the
-live voice catalogue so a typo fails now rather than on a call, and writes it
-to `.env`. The server refuses to start without one — a line that answers and
-then cannot speak is worse than one that never came up.
+### Node — no dependencies, Node 18+
 
-The container runs as a non-root user with a read-only filesystem and
-`no-new-privileges`, because the first question your security review will ask
-is whether it needs root. It does not.
+```bash
+npm start
+# or: node examples/node/index.mjs ["what the caller says"]
+```
 
-Nothing phones home. The single outbound call is speech synthesis — and
-pointing `VOHO_BASE_URL` at a Voho deployment inside your own network removes
-even that, at which point the container runs with no internet at all.
+### Python — no dependencies, Python 3.9+
+
+```bash
+python examples/python/main.py ["what the caller says"]
+```
+
+Either one speaks a line in Najdi Arabic and writes voho.mp3. Set VOHO_AGENT_ID and it holds a conversation instead, writing the reply as reply.mp3.
+
+### Have it answer back
+
+Speaking a line needs nothing but a key. To hold a conversation, create an
+agent at [app.voho.ai/agents](https://app.voho.ai/agents) — pick a template,
+edit the prompt — then take its id from the URL:
+
+```bash
+export VOHO_AGENT_ID=...        # from app.voho.ai/agents/<id>
+npm start "أبي أعرف عن خدماتكم"
+```
+
+The agent answers from its own prompt, in its own voice, and `reply.mp3` is
+what the caller would have heard.
 
 ## Connecting your systems
+
+> **What is in this repository today:** a working example that calls the Voho
+> API — the quick start above runs it. The packaged container and the tool-stub
+> server described below are being published separately; the integration points
+> are documented here so you can see what wiring one up involves.
 
 Each scenario names the tools it calls, with the arguments they take and the
 result they returned when it was recorded. That recording is the contract:
